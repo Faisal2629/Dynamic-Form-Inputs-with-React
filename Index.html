@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Hobbies Form</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    // Import React and useState hook
+    const { useState } = React;
+
+    function DynamicHobbiesForm() {
+      // Initialize state with a single hobby input field
+      const [hobbies, setHobbies] = useState([""]);
+
+      // Handler to update hobby input value
+      const handleHobbyChange = (index, event) => {
+        const newHobbies = [...hobbies];
+        newHobbies[index] = event.target.value;
+        setHobbies(newHobbies);
+      };
+
+      // Handler to add a new hobby input field
+      const addHobbyField = () => {
+        setHobbies([...hobbies, ""]);
+      };
+
+      // Handler to remove a hobby input field
+      const removeHobbyField = (index) => {
+        if (hobbies.length > 1) {
+          const newHobbies = hobbies.filter((_, i) => i !== index);
+          setHobbies(newHobbies);
+        }
+      };
+
+      // Handler to submit the form
+      const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log("Hobbies:", hobbies);
+      };
+
+      return (
+        <form onSubmit={handleSubmit} style={{ maxWidth: "400px", margin: "0 auto" }}>
+          <h2>Enter Your Hobbies</h2>
+          {hobbies.map((hobby, index) => (
+            <div key={index} style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+              <input
+                type="text"
+                value={hobby}
+                onChange={(event) => handleHobbyChange(index, event)}
+                placeholder={`Hobby ${index + 1}`}
+                style={{ flex: "1", marginRight: "8px" }}
+              />
+              {index > 0 && (
+                <button
+                  type="button"
+                  onClick={() => removeHobbyField(index)}
+                  style={{ backgroundColor: "#ff4d4d", color: "#fff", border: "none", padding: "5px 10px", cursor: "pointer" }}
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addHobbyField}
+            style={{ backgroundColor: "#4CAF50", color: "#fff", border: "none", padding: "10px 15px", cursor: "pointer", marginBottom: "10px" }}
+          >
+            Add Hobby
+          </button>
+          <br />
+          <button
+            type="submit"
+            style={{ backgroundColor: "#008CBA", color: "#fff", border: "none", padding: "10px 15px", cursor: "pointer" }}
+          >
+            Submit
+          </button>
+        </form>
+      );
+    }
+
+    // Render the DynamicHobbiesForm component into the root div
+    ReactDOM.render(<DynamicHobbiesForm />, document.getElementById("root"));
+  </script>
+</html>
